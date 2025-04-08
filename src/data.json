@@ -1,0 +1,148 @@
+[
+  {
+    "id": "1",
+    "name": "Berlin",
+    "bookings": [
+      {
+        "id": "1",
+        "pickupReturnStationId": "1",
+        "customerName": "Keara Adams",
+        "startDate": "2021-03-13T22:04:19.032Z",
+        "endDate": "2021-07-17T08:51:27.402Z"
+      },
+      {
+        "id": "7",
+        "pickupReturnStationId": "1",
+        "customerName": "Elmira Larkin Sr.",
+        "startDate": "2021-02-19T17:22:15.117Z",
+        "endDate": "2021-08-10T10:35:41.773Z"
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "name": "Munich",
+    "bookings": [
+      {
+        "id": "2",
+        "pickupReturnStationId": "2",
+        "customerName": "Carroll Doyle",
+        "startDate": "2020-06-16T23:11:29.630Z",
+        "endDate": "2021-07-10T20:30:58.997Z"
+      },
+      {
+        "id": "8",
+        "pickupReturnStationId": "2",
+        "customerName": "Jimmy Bogisich",
+        "startDate": "2021-03-26T02:40:54.086Z",
+        "endDate": "2021-06-14T13:30:40.341Z"
+      },
+      {
+        "id": "14",
+        "pickupReturnStationId": "2",
+        "customerName": "Miss Elvis Durgan",
+        "startDate": "2020-11-26T17:11:42.933Z",
+        "endDate": "2021-05-07T14:29:06.043Z"
+      }
+    ]
+  },
+  {
+    "id": "3",
+    "name": "Frankfurt",
+    "bookings": [
+      {
+        "id": "3",
+        "pickupReturnStationId": "3",
+        "customerName": "Rebeca Fritsch",
+        "startDate": "2020-10-20T15:43:54.055Z",
+        "endDate": "2021-12-04T09:55:46.729Z"
+      },
+      {
+        "id": "9",
+        "pickupReturnStationId": "3",
+        "customerName": "Fannie Volkman",
+        "startDate": "2020-06-15T11:27:53.378Z",
+        "endDate": "2021-07-30T16:10:54.049Z"
+      },
+      {
+        "id": "15",
+        "pickupReturnStationId": "3",
+        "customerName": "Zella Conn",
+        "startDate": "2021-01-07T22:41:02.120Z",
+        "endDate": "2021-10-12T00:25:45.295Z"
+      }
+    ]
+  },
+  {
+    "id": "4",
+    "name": "Lisbon",
+    "bookings": [
+      {
+        "id": "4",
+        "pickupReturnStationId": "4",
+        "customerName": "Giovani Abbott",
+        "startDate": "2021-03-13T05:14:07.225Z",
+        "endDate": "2021-08-29T23:11:51.494Z"
+      },
+      {
+        "id": "10",
+        "pickupReturnStationId": "4",
+        "customerName": "Sonia Kuhic",
+        "startDate": "2020-08-08T22:13:05.684Z",
+        "endDate": "2022-03-29T08:02:18.721Z"
+      },
+      {
+        "id": "16",
+        "pickupReturnStationId": "4",
+        "customerName": "Carrie Durgan",
+        "startDate": "2021-01-28T11:28:02.038Z",
+        "endDate": "2021-10-28T08:38:32.645Z"
+      }
+    ]
+  },
+  {
+    "id": "5",
+    "name": "Barcelona",
+    "bookings": [
+      {
+        "id": "5",
+        "pickupReturnStationId": "5",
+        "customerName": "Bartholome Mosciski",
+        "startDate": "2020-09-13T00:42:51.148Z",
+        "endDate": "2021-05-09T06:40:18.998Z"
+      },
+      {
+        "id": "11",
+        "pickupReturnStationId": "5",
+        "customerName": "Sammy Rogahn",
+        "startDate": "2021-03-29T15:42:59.496Z",
+        "endDate": "2021-10-18T02:59:41.122Z"
+      },
+      {
+        "id": "17",
+        "pickupReturnStationId": "5",
+        "customerName": "Aletha Hane",
+        "startDate": "2020-11-07T21:25:51.136Z",
+        "endDate": "2021-11-13T06:40:09.561Z"
+      }
+    ]
+  },
+  {
+    "id": "6",
+    "name": "Lyon",
+    "bookings": [
+      {
+        "id": "6",
+        "pickupReturnStationId": "6",
+        "customerName": "Iva Jacobson",
+        "startDate": "2021-02-05T20:14:10.117Z",
+        "endDate": "2021-06-30T03:31:09.218Z"
+      }
+    ]
+  },
+  {
+    "name": "station-name{{i}}",
+    "id": "7",
+    "bookings": []
+  }
+]

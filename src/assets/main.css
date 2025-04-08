@@ -1,0 +1,11 @@
+@import './base.css';
+@import 'tailwindcss';
+
+body {
+  background-color: var(--color-gray-100);
+}
+
+#app {
+  margin: 0 auto;
+  font-weight: normal;
+}
