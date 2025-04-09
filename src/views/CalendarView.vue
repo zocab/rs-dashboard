@@ -87,14 +87,14 @@
         cn(
           'bg-white/80 shadow-sm border border-gray-200 flex flex-col hover:shadow-md transition overflow-hidden',
           'first-of-type:rounded-tl-lg last-of-type:rounded-tr-lg',
-          'first-of-type:rounded-tr-lg xs:rounded-tr-none'
+          'first-of-type:rounded-tr-lg first-of-type:sm:rounded-tr-none'
         )
       "
     >
       <div
         class="flex justify-between font-semibold text-gray-700 text-sm border-b p-3 bg-[#ffd95d]"
       >
-        <span class="text-gray-400">{{ formatDate(day, 'EEE') }}</span>
+        <span class="text-gray-500">{{ formatDate(day, 'EEE') }}</span>
         <span>{{ formatDate(day, 'dd MMM') }}</span>
       </div>
       <div class="flex-1 space-y-2 overflow-hidden py-4 px-3 md:min-h-44">
