@@ -4,45 +4,7 @@
   >
     <div class="w-full md:w-auto">
       <div class="relative mt-1">
-        <Combobox v-model="selectedStation">
-          <ComboboxAnchor as-child>
-            <ComboboxTrigger as-child>
-              <Button
-                variant="outline"
-                class="justify-between bg-[#388E3C] hover:bg-[#388e3cde] text-white hover:text-white w-full"
-              >
-                <LocateIcon /> {{ selectedStation?.name ?? 'Select station' }}
-                <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
-              </Button>
-            </ComboboxTrigger>
-          </ComboboxAnchor>
-
-          <ComboboxList v-if="filteredStations.length > 0">
-            <div class="relative w-full max-w-sm items-center">
-              <ComboboxInput
-                class="pl-2 focus-visible:ring-0 border-0 border-b rounded-none h-10"
-                placeholder="Select station..."
-              />
-              <span class="absolute start-0 inset-y-0 flex items-center justify-center px-3">
-                <Search class="size-4 text-muted-foreground" />
-              </span>
-            </div>
-
-            <ComboboxEmpty> No framework found. </ComboboxEmpty>
-
-            <ComboboxGroup>
-              <ComboboxItem
-                v-for="station in filteredStations"
-                :key="station.id"
-                :value="station"
-                class="cursor-pointer px-4 py-2 hover:bg-gray-100"
-              >
-                {{ station.name }}
-              </ComboboxItem>
-            </ComboboxGroup>
-          </ComboboxList>
-          <ComboboxEmpty v-else class="px-4 py-2 text-gray-500">No stations found.</ComboboxEmpty>
-        </Combobox>
+        <StationSelector />
       </div>
     </div>
     <div class="flex gap-4">
@@ -87,7 +49,7 @@
         cn(
           'bg-white/80 shadow-sm border border-gray-200 flex flex-col hover:shadow-md transition overflow-hidden',
           'first-of-type:rounded-tl-lg last-of-type:rounded-tr-lg',
-          'first-of-type:rounded-tr-lg first-of-type:sm:rounded-tr-none'
+          'first-of-type:rounded-tr-lg first-of-type:sm:rounded-tr-none',
         )
       "
     >
@@ -98,21 +60,29 @@
         <span>{{ formatDate(day, 'dd MMM') }}</span>
       </div>
       <div class="flex-1 space-y-2 overflow-hidden py-4 px-3 md:min-h-44">
-        <HoverCard v-for="b in bookingsForDay(day)" :key="b.id">
+        <HoverCard v-for="booking in bookingsForDay(day)" :key="booking.id">
           <HoverCardTrigger
-            :class="bookingClass(day, b)"
-            @click="showBookingDetail(b)"
-            class="text-xs p-2 rounded shadow cursor-pointer transition-transform duration-150 flex"
-            >{{ b.customerName }}</HoverCardTrigger
+            :class="bookingClass(day, booking)"
+            @click="showBookingDetail(booking)"
+            class="text-xs p-2 rounded shadow cursor-pointer transition-transform duration-150 flex flex-col"
           >
+            <span>{{ booking.customerName }}</span>
+            <span class="text-[10px] text-gray-600 mt-1">
+              {{
+                isSameDay(day, parseISO(booking.startDate))
+                  ? 'Pickup: ' + format(parseISO(booking.startDate), 'HH:mm')
+                  : 'Return: ' + format(parseISO(booking.endDate), 'HH:mm')
+              }}
+            </span>
+          </HoverCardTrigger>
           <HoverCardContent class="text-xs space-y-1 w-auto">
             <p>
               <span class="font-bold">From:</span>
-              {{ format(parseISO(b.startDate), 'dd MMM yyyy, hh:mm a') }}
+              {{ format(parseISO(booking.startDate), 'dd MMM yyyy, HH:mm') }}
             </p>
             <p>
               <span class="font-bold">To:</span>
-              {{ format(parseISO(b.endDate), 'dd MMM yyyy, hh:mm a') }}
+              {{ format(parseISO(booking.endDate), 'dd MMM yyyy, HH:mm') }}
             </p>
           </HoverCardContent>
         </HoverCard>
@@ -122,9 +92,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { format, startOfWeek, addDays, isSameDay, parseISO } from 'date-fns'
+import { format, startOfWeek, isSameDay, parseISO } from 'date-fns'
 import { useQuery } from '@tanstack/vue-query'
 import type { Booking, Station } from '../types'
 import VueDatePicker from '@vuepic/vue-datepicker'
@@ -133,19 +103,12 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import { useCalendarStore } from '../stores/calendarStore'
 
 import { Button } from '@/components/ui/button'
-import {
-  Combobox,
-  ComboboxAnchor,
-  ComboboxEmpty,
-  ComboboxGroup,
-  ComboboxInput,
-  ComboboxItem,
-  ComboboxList,
-  ComboboxTrigger,
-} from '@/components/ui/combobox'
-import { ChevronsUpDown, Search, LocateIcon } from 'lucide-vue-next'
 import { cn } from '@/lib/utils'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
+import StationSelector from '@/components/StationSelector.vue'
+import { useCalendarLogic } from '@/composables/useCalendar'
+
+const { selectedDate, currentWeekStart, weekDays, goToToday, changeWeek } = useCalendarLogic()
 
 async function fetchStations(): Promise<Station[]> {
   const res = await fetch('https://605c94c36d85de00170da8b4.mockapi.io/stations')
@@ -162,24 +125,9 @@ const selectedStation = computed({
   get: () => calendarStore.selectedStation,
   set: (v) => calendarStore.setStation(v),
 })
-const selectedDate = computed({
-  get: () => calendarStore.selectedDate,
-  set: (v) => calendarStore.setDate(v),
-})
 
-const query = ref('')
-const currentWeekStart = ref(startOfWeek(selectedDate.value, { weekStartsOn: 1 }))
-
-watch(selectedDate, (newVal) => {
-  currentWeekStart.value = startOfWeek(newVal, { weekStartsOn: 1 })
-})
-
-const filteredStations = computed(() => {
-  const stations = data.value ?? []
-  if (!query.value) return stations
-  return stations.filter((x) =>
-    x.name.toLowerCase().replace(/\s+/g, '').includes(query.value.toLowerCase().replace(/\s+/g, ''))
-  )
+watch(selectedDate, (newValue) => {
+  currentWeekStart.value = startOfWeek(newValue, { weekStartsOn: 1 })
 })
 
 watch(
@@ -189,7 +137,7 @@ watch(
       selectedStation.value = stations[0]
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 function onDateChange(date: Date) {
@@ -197,48 +145,34 @@ function onDateChange(date: Date) {
   currentWeekStart.value = startOfWeek(date, { weekStartsOn: 1 })
 }
 
-function goToToday() {
-  const today = new Date()
-  selectedDate.value = today
-  currentWeekStart.value = startOfWeek(today, { weekStartsOn: 1 })
-}
-
-const weekDays = computed(() =>
-  Array.from({ length: 7 }, (_, i) => addDays(currentWeekStart.value, i))
-)
-
 function formatDate(date: Date, fmt: string) {
   return format(date, fmt)
 }
 
 function prevWeek() {
-  const newStart = addDays(currentWeekStart.value, -7)
-  calendarStore.setDate(newStart)
-  currentWeekStart.value = newStart
+  changeWeek('prev')
 }
 
 function nextWeek() {
-  const newStart = addDays(currentWeekStart.value, 7)
-  calendarStore.setDate(newStart)
-  currentWeekStart.value = newStart
+  changeWeek('next')
 }
 
-function bookingClass(day: Date, b: Booking) {
-  const s = parseISO(b.startDate)
-  const e = parseISO(b.endDate)
-  if (isSameDay(day, s)) return 'bg-green-100 text-green-800'
-  if (isSameDay(day, e)) return 'bg-red-100 text-red-800'
+function bookingClass(day: Date, booking: Booking) {
+  const start = parseISO(booking.startDate)
+  const end = parseISO(booking.endDate)
+  if (isSameDay(day, start)) return 'bg-green-200 text-green-800'
+  if (isSameDay(day, end)) return 'bg-red-200 text-red-800'
   return 'bg-gray-100 text-gray-700'
 }
 
 function bookingsForDay(day: Date): Booking[] {
   if (!selectedStation.value) return []
-  const st = data.value?.find((x) => x.id === selectedStation.value?.id)
-  if (!st) return []
-  return st.bookings.filter((b) => {
-    const s = parseISO(b.startDate)
-    const e = parseISO(b.endDate)
-    return isSameDay(day, s) || isSameDay(day, e)
+  const station = data.value?.find((x) => x.id === selectedStation.value?.id)
+  if (!station) return []
+  return station.bookings.filter((booking) => {
+    const start = parseISO(booking.startDate)
+    const end = parseISO(booking.endDate)
+    return isSameDay(day, start) || isSameDay(day, end)
   })
 }
 
@@ -248,5 +182,4 @@ function showBookingDetail(b: Booking) {
     params: { stationId: b.pickupReturnStationId, bookingId: b.id },
   })
 }
-
 </script>
