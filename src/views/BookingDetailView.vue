@@ -63,7 +63,7 @@
                   :model-type="'iso'"
                   :format="'yyyy-MM-dd HH:mm'"
                   :min-date="new Date()"
-                  class="w-full"
+                  class="w-full [&_input]:text-xs!"
                 />
 
                 <p v-if="errorMessage" class="text-sm text-red-600">{{ errorMessage }}</p>

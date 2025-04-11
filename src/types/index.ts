@@ -1,4 +1,3 @@
-// src/types/index.ts
 export interface Booking {
   id: string
   pickupReturnStationId: string
