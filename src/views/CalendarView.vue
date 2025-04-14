@@ -43,7 +43,7 @@
     </div>
     <!-- Calendar body -->
     <div class="relative flex-1 grid h-full w-full py-4">
-      <div class="absolute top-0 bottom-0 w-full flex">
+      <div class="absolute top-0 bottom-0 w-full flex bg-amber-50">
         <div v-for="(day, index) in weekDays" :key="index" :class="cn(
           'border-l last-of-type:border-r border-b flex flex-col transition overflow-hidden flex-1 shrink-0',
         )
