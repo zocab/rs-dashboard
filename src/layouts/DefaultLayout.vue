@@ -11,7 +11,7 @@
       </h1>
     </header>
 
-    <main class="flex-grow px-4 py-6 sm:px-8 sm:py-10 my-6 bg-white/50 rounded-xl shadow-lg backdrop-blur p-3 w-full xl:w-7xl mx-auto h-full">
+    <main class="flex flex-col flex-grow px-4 py-6 sm:px-8 sm:py-10 my-6 bg-white/50 rounded-xl shadow-lg backdrop-blur p-3 w-full xl:w-7xl mx-auto h-full">
       <router-view />
     </main>
 
